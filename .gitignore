@@ -1,0 +1,26 @@
+# --- Build output (Maven) ---
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.restore
+release.properties
+dependency-reduced-pom.xml
+
+# --- Log files ---
+*.log
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# --- OS Specific files ---
+.DS_Store
+Thumbs.db
+
+# --- Secrets and Local Configs ---
+.env
+*.properties.local

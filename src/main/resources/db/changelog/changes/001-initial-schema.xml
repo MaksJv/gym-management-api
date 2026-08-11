@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-users-and-training-types" author="korne">
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="training_types">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="2-create-trainees-and-trainers" author="korne">
+
+        <createTable tableName="trainees">
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_trainee_user"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="date_of_birth" type="DATE"/>
+            <column name="address" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="trainers">
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_trainer_user"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="training_type_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_trainer_training_type"
+                             referencedTableName="training_types"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="3-create-trainings" author="korne">
+
+        <createTable tableName="trainings">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="trainee_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_training_trainee"
+                             referencedTableName="trainees"
+                             referencedColumnNames="user_id"/>
+            </column>
+            <column name="trainer_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_training_trainer"
+                             referencedTableName="trainers"
+                             referencedColumnNames="user_id"/>
+            </column>
+            <column name="training_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="training_type_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_training_type"
+                             referencedTableName="training_types"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="training_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_minutes" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

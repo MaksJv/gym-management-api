@@ -1,0 +1,1244 @@
+{
+  "info": {
+    "_postman_id": "59a9db29-0dcd-4e2f-bb4a-52832e2ab78f",
+    "name": "Api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45621568"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User created\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('username');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Ivanov\",\r\n    \"username\": \"ivan.ivanov1\",\r\n    \"password\": \"securePassword123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/users",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200 and returns array\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "    pm.expect(pm.response.json()).to.be.an('array');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/users",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User data is correct\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.expect(jsonData).to.have.property('firstName');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/users/:id",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User By Id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Petrenko\",\r\n    \"password\": \"newStron\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/users/:id",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/users/:id",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Trainer",
+      "item": [
+        {
+          "name": "Create Trainer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Trainer created with 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData.id).to.not.be.null;\r",
+                  "    pm.expect(jsonData.id).to.be.a('number');\r",
+                  "    \r",
+                  "    pm.environment.set(\"createdTrainerId\", jsonData.id);\r",
+                  "    pm.environment.set(\"trainerPassword\", jsonData.password);\r",
+                  "    pm.environment.set(\"trainerUsername\", jsonData.username);\r",
+                  "    if (jsonData.password) {\r",
+                  "        pm.environment.set(\"trainerPassword\", jsonData.password);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Arni\",\r\n    \"lastName\": \"Strong\",\r\n    \"username\": \"arni.strong111\",\r\n    \"password\": \"gymPassword2026!\",\r\n    \"specializationId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainer By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Trainer structure check\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.expect(jsonData).to.have.property('specialization');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers/{{createdTrainerId}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers",
+                "{{createdTrainerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Trainer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Успішна реєстрація тренера\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Згенеровано облікові дані тренера\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.username).to.exist;\r",
+                  "    pm.expect(jsonData.password).to.exist;\r",
+                  "\r",
+                  "    pm.environment.set(\"trainerUsername\", jsonData.username);\r",
+                  "    pm.environment.set(\"trainerPassword\", jsonData.password);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Dmytro\",\r\n  \"lastName\": \"Kavalenko\",\r\n  \"specializationId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers/register",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainer Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains correct trainer profile structure\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('firstName');\r",
+                  "    pm.expect(jsonData).to.have.property('lastName');\r",
+                  "    pm.expect(jsonData).to.have.property('specialization');\r",
+                  "    pm.expect(jsonData).to.have.property('isActive');\r",
+                  "    pm.expect(jsonData).to.have.property('trainees');\r",
+                  "\r",
+                  "    pm.expect(jsonData.isActive).to.be.a('boolean');\r",
+                  "    pm.expect(jsonData.trainees).to.be.an('array');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers/profile/{{trainerUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers",
+                "profile",
+                "{{trainerUsername}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Trainer Profile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Dmitryiy\",\r\n  \"lastName\": \"Kovalenko\",\r\n  \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers/{{trainerUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers",
+                "{{trainerUsername}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainer's Trainings List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is a valid list of trainer's trainings\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "\r",
+                  "    if (jsonData.length > 0) {\r",
+                  "        const firstTraining = jsonData[0];\r",
+                  "        \r",
+                  "        pm.expect(firstTraining).to.have.property('trainingName');\r",
+                  "        pm.expect(firstTraining).to.have.property('trainingDate');\r",
+                  "        pm.expect(firstTraining).to.have.property('trainingType');\r",
+                  "        pm.expect(firstTraining).to.have.property('duration');\r",
+                  "        pm.expect(firstTraining).to.have.property('traineeName');\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainers/{{trainerUsername}}/trainings?periodFrom=2026-01-01&periodTo=2026-12-31&traineeName={{traineeUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainers",
+                "{{trainerUsername}}",
+                "trainings"
+              ],
+              "query": [
+                {
+                  "key": "periodFrom",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "periodTo",
+                  "value": "2026-12-31"
+                },
+                {
+                  "key": "traineeName",
+                  "value": "{{traineeUsername}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Trainee",
+      "item": [
+        {
+          "name": "Create Trainee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Trainee created\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('username');\r",
+                  "\r",
+                  "    pm.environment.set(\"traineeUsername\", jsonData.username);\r",
+                  "    pm.environment.set(\"traineePassword\", jsonData.password);\r",
+                  "\r",
+                  "    pm.expect(jsonData.id).to.not.be.null;\r",
+                  "    pm.expect(jsonData.id).to.be.a('number');\r",
+                  "\r",
+                  "    pm.environment.set(\"createdTraineeId\", jsonData.id);\r",
+                  "    pm.environment.set(\"traineeId\", jsonData.id);\r",
+                  "\r",
+                  "    if (jsonData.password) {\r",
+                  "        pm.environment.set(\"traineePassword\", jsonData.password);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Олексій\",\r\n    \"lastName\": \"Петренко\",\r\n    \"username\": \"oleksii.petrenko1\",\r\n    \"password\": \"securePass2026!\",\r\n    \"dateOfBirth\": \"2000-05-15\",\r\n    \"address\": \"Київ, вул. Спортивна 10\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainee By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Trainee DTO check\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.expect(jsonData).to.have.property('username');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/{{createdTraineeId}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "{{createdTraineeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Trainee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The response contains authentication details (CredentialsResponse)\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('username');\r",
+                  "    pm.expect(jsonData).to.have.property('password');\r",
+                  "    pm.expect(jsonData.username).to.be.a('string');\r",
+                  "    pm.expect(jsonData.password).to.be.a('string');\r",
+                  "\r",
+                  "    pm.environment.set(\"traineeUsername\", jsonData.username);\r",
+                  "    pm.environment.set(\"traineePassword\", jsonData.password);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Olexii\",\r\n  \"lastName\": \"Petrenko\",\r\n  \"dateOfBirth\": \"1995-05-15T00:00:00\",\r\n  \"address\": \"Kyiv, ul. Hreshatuk, 1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/register",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainee Profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/profile/{{traineeUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "profile",
+                "{{traineeUsername}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Trainee Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Trainee profile updated successfully\", function () {\r",
+                  "    const responseData = pm.response.json();\r",
+                  "    \r",
+                  "    const requestData = JSON.parse(pm.request.body.raw);\r",
+                  "    \r",
+                  "    pm.expect(responseData.firstName).to.eql(requestData.firstName);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Alex111\",\r\n  \"lastName\": \"Smith\",\r\n  \"dateOfBirth\": \"1995-05-15\",\r\n  \"address\": \"123 Main Street, New York\",\r\n  \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/{{traineeUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "{{traineeUsername}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trainee's Trainings List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is a valid list of trainings\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "\r",
+                  "    if (jsonData.length > 0) {\r",
+                  "        const firstTraining = jsonData[0];\r",
+                  "        \r",
+                  "        pm.expect(firstTraining).to.have.property('trainingName');\r",
+                  "        pm.expect(firstTraining).to.have.property('trainingDate');\r",
+                  "        pm.expect(firstTraining).to.have.property('trainingType');\r",
+                  "        pm.expect(firstTraining).to.have.property('duration');\r",
+                  "        pm.expect(firstTraining).to.have.property('trainerName');\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/{{traineeUsername}}/trainings?periodFrom=2026-01-01&periodTo=2026-12-31&trainerName=John&trainingType=Fitness",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "{{traineeUsername}}",
+                "trainings"
+              ],
+              "query": [
+                {
+                  "key": "periodFrom",
+                  "value": "2026-01-01",
+                  "description": "Filter from this date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "periodTo",
+                  "value": "2026-12-31",
+                  "description": "Filter to this date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "trainerName",
+                  "value": "John",
+                  "description": "Filter by trainer's first or last name",
+                  "type": "text"
+                },
+                {
+                  "key": "trainingType",
+                  "value": "Fitness",
+                  "description": "Filter by training type name",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Trainee Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict - Cannot delete with future trainings\", function () {\r",
+                  "    pm.response.to.have.status(409);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains data integrity error message\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData.message).to.include(\"Cannot delete user\");\r",
+                  "    pm.expect(jsonData.message).to.include(\"because they have future trainings\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainees/{{traineeUsername}}",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainees",
+                "{{traineeUsername}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Training",
+      "item": [
+        {
+          "name": "Create Training",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Training scheduled\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"traineeId\": {{createdTraineeId}},\r\n    \"trainerId\": {{createdTrainerId}},\r\n    \"trainingName\": \"Morning Workout\",\r\n    \"trainingDate\": \"2026-10-23T10:00:00\",\r\n    \"trainingTypeId\": 1,\r\n    \"durationMinutes\": 60\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainings",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Training",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "try {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    if (jsonData && jsonData.id) {\r",
+                  "        pm.environment.set(\"current_training_id\", jsonData.id);\r",
+                  "    }\r",
+                  "} catch (e) {\r",
+                  "    console.log(\"Response body is empty or not JSON\");\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"traineeUsername\": \"{{traineeUsername}}\",\r\n  \"trainerUsername\": \"{{trainerUsername}}\", \r\n  \"trainingName\": \"Morning Cardio Session\",\r\n  \"trainingDate\": \"2026-10-01T09:00:00\",\r\n  \"trainingType\": \"YOGA\",\r\n  \"duration\": 60\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainings/add",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainings",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Training by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains valid training details\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.expect(jsonData).to.have.property('trainingName');\r",
+                  "    pm.expect(jsonData).to.have.property('trainingDate');\r",
+                  "    pm.expect(jsonData).to.have.property('duration');\r",
+                  "    pm.expect(jsonData).to.have.property('traineeName');\r",
+                  "    pm.expect(jsonData).to.have.property('trainerName');\r",
+                  "\r",
+                  "    pm.expect(jsonData.duration).to.be.a('number');\r",
+                  "    pm.expect(jsonData.trainingName).to.eql(\"Morning Workout\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainings/:id",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Trainee2Trainer",
+      "item": [
+        {
+          "name": "Assign",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Assignment successful or already exists\", function () {\r",
+                  "    const statusCode = pm.response.code;\r",
+                  "\r",
+                  "    if (statusCode === 201) {\r",
+                  "        pm.expect(statusCode).to.eql(201);\r",
+                  "    } else if (statusCode === 400) {\r",
+                  "        const jsonData = pm.response.json();\r",
+                  "        \r",
+                  "        pm.expect(jsonData.message).to.include(\"already assigned to trainer\");\r",
+                  "    } else {\r",
+                  "        pm.fail(\"Unexpected status code: \" + statusCode);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"traineeId\": {{createdTraineeId}},\r\n    \"trainerId\": {{createdTrainerId}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/trainee2trainer",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainee2trainer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get assignment By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/trainee2trainer/:id",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "trainee2trainer",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TrainingType",
+      "item": [
+        {
+          "name": "Get All Training Types",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is a non-empty list\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "    if (jsonData.length > 0) {\r",
+                  "        pm.expect(jsonData[0]).to.have.property('id');\r",
+                  "        pm.expect(jsonData[0]).to.have.property('name');\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/training-types",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "training-types"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login successful – Status 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{trainerUsername}}\",\r\n  \"password\": \"{{trainerPassword}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrlv1}}/login",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK - Application is healthy\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Application status is UP\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData.status).to.eql(\"UP\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlv1}}/health",
+              "host": [
+                "{{baseUrlv1}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

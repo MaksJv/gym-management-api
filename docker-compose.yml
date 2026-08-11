@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gym-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gym_db}
+      POSTGRES_USER: ${DB_USERNAME:-gym_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-gym_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-gym_user} -d ${DB_NAME:-gym_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  gym-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gym-management-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-gym_db}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-gym_user}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-gym_password}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
